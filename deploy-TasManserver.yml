@@ -1,0 +1,45 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servertasman-deployment
+  labels:
+    app: servertasman
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servertasman
+  template:
+    metadata:
+      labels:
+        app: servertasman
+    spec:
+      containers:
+      - name: nodeservertasman
+        image: airnang/servertasman:latest
+        ports:
+        - containerPort: 9001
+      nodeSelector:
+        nodeType: client
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: servertasman-service
+spec:
+  selector:
+    app: servertasman
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 5003
+    targetPort: 9001
+    nodePort: 32221
+
+
+
+
+
